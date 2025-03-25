@@ -40,7 +40,7 @@ router.post("/block/:id",verifyAdmin,blockCustomer)
 router.post('/unblock/:id',verifyAdmin,unblockCustomers)
   
 ///////// search a specific name///////
-router.post('/search',searchCustomer) 
+router.post('/search',verifyAdmin,searchCustomer) 
 
 
 //*************************************dashbord */**************** */
@@ -65,9 +65,9 @@ router.get("/dash/pdf-report/:period",verifyAdmin,downloadSalesReportPdf)
 /**********************************************Product****************** */
 
 
-router.get("/product",getProduct)
+router.get("/product",verifyAdmin,getProduct)
 //get add product
-router.get("/add-product", getAddProduct)
+router.get("/add-product",verifyAdmin, getAddProduct)
 //post add products//
 
 router.post('/add-product',verifyAdmin,upload.any(),doAddProduct)
@@ -87,20 +87,9 @@ router.get("/product-detail/:id",verifyAdmin,productDetailPage)
 ///**********************************Catogary *********************************/
 
 
-// router.get('/category',verifyAdmin,getCategory)
+router.get('/category',verifyAdmin,getCategory)
 
-router.get('/category', (req, res, next) => {
-    console.log("🔍 verifyAdmin middleware is being executed...");
 
-    verifyAdmin(req, res, (err) => {
-        if (err) {
-            console.log("❌ verifyAdmin rejected the request:", err.message);
-            return res.status(403).json({ message: err.message });
-        }
-        console.log("✅ verifyAdmin passed, proceeding to getCategory...");
-        next();
-    });
-}, getCategory);
 
 //get add product
 router.get('/add-category',verifyAdmin,getAddcategory)
