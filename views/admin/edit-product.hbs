@@ -408,113 +408,103 @@
   <script>
 
 
-    document.getElementById("add-product-form").addEventListener('submit', (e) => {
-      var product = document.getElementById("product").value;
-      document.getElementById("product-name-error").innerHTML;
-      if (product === '') {
-        document.getElementById("product-name-error").innerHTML = 'This field is required'
-        e.preventDefault()
-      }
-      else if (/^\s|\s$/.test(product)) {
-        document.getElementById("product-name-error").innerHTML = 'Space is not allowed'
-        e.preventDefault()
+    document.getElementById("add-product-form").addEventListener("submit", function (e) {
+      let isValid = true; // Track validation status
+
+      // Product Name Validation
+      let product = document.getElementById("product").value.trim();
+      let productError = document.getElementById("product-name-error");
+      productError.innerHTML = "";
+
+      if (product === "") {
+        productError.innerHTML = "This field is required";
+        isValid = false;
+      } else if (/^\s|\s$/.test(document.getElementById("product").value)) {
+        productError.innerHTML = "Leading or trailing spaces are not allowed";
+        isValid = false;
+      } else if (product.length < 3) {
+        productError.innerHTML = "Product name must be at least 3 characters long";
+        isValid = false;
       }
 
+      // Category Validation
+      let category = document.getElementById("category").value.trim();
+      let categoryError = document.getElementById("category-name-error");
+      categoryError.innerHTML = "";
 
-      var category = document.getElementById("category").value
-      document.getElementById("category-name-error").innerHTML;
-      if (category === '') {
-        document.getElementById("category-name-error").innerHTML = "This field is required"
-        e.preventDefault()
-      }
-      else if (/^\s|\s$/.test(category)) {
-        document.getElementById("category-name-error").innerHTML = 'Space is not allowed'
-        e.preventDefault()
+      if (category === "") {
+        categoryError.innerHTML = "This field is required";
+        isValid = false;
       }
 
+      // Description Validation
+      let description = document.getElementById("description").value.trim();
+      let descriptionError = document.getElementById("description-name-error");
+      descriptionError.innerHTML = "";
 
-      var description = document.getElementById("description").value
-      document.getElementById("description-name-error").innerHTML;
-      if (description === '') {
-        document.getElementById("description-name-error").innerHTML = "This field is required"
-        e.preventDefault()
-      }
-      else if (/^\s|\s$/.test(description)) {
-        document.getElementById("description-name-error").innerHTML = 'Space is not allowed'
-        e.preventDefault()
+      if (description === "") {
+        descriptionError.innerHTML = "This field is required";
+        isValid = false;
       }
 
+      // Price Validation
+      let price = document.getElementById("price").value.trim();
+      let priceError = document.getElementById("price-name-error");
+      priceError.innerHTML = "";
 
-      var price = document.getElementById("price").value
-      document.getElementById("price-name-error").innerHTML;
-      if (price === '') {
-        document.getElementById("price-name-error").innerHTML = "This field is required"
-        e.preventDefault()
-      }
-      else if (price <= 0) {
-        document.getElementById("price-name-error").innerHTML = "price should not be negative"
-        e.preventDefault()
-      }
-      else if (/^\s|\s$/.test(price)) {
-        document.getElementById("price-name-error").innerHTML = 'Space is not allowed'
-        e.preventDefault()
+      if (price === "") {
+        priceError.innerHTML = "This field is required";
+        isValid = false;
+      } else if (!/^\d+(\.\d{1,2})?$/.test(price) || parseFloat(price) <= 0) {
+        priceError.innerHTML = "Price should be a positive number";
+        isValid = false;
       }
 
+      // Discount Validation
+      let discount = document.getElementById("discount").value.trim();
+      let discountError = document.getElementById("discount-name-error");
+      discountError.innerHTML = "";
 
-      var discount = document.getElementById("discount").value
-      document.getElementById("discount-name-error").innerHTML;
-      if (discount === '') {
-        document.getElementById("discount-name-error").innerHTML = "This field is required"
-        e.preventDefault()
-      }
-      else if (discount <= 0) {
-        document.getElementById("discount-name-error").innerHTML = "price should not be negative"
-        e.preventDefault()
-      }
-      {
-        {
-          !-- else if (discount = price) {
-            document.getElementById("discount-name-error").innerHTML = "Discount greaterthan price "
-            e.preventDefault()
-          } --}
-      }
-      else if (/^\s|\s$/.test(discount)) {
-        document.getElementById("discount-name-error").innerHTML = 'Space is not allowed'
-        e.preventDefault()
+      if (discount === "") {
+        discountError.innerHTML = "This field is required";
+        isValid = false;
+      } else if (!/^\d+(\.\d{1,2})?$/.test(discount) || parseFloat(discount) < 0) {
+        discountError.innerHTML = "Discount should not be negative";
+        isValid = false;
+      } else if (parseFloat(discount) > parseFloat(price)) {
+        discountError.innerHTML = "Discount cannot be greater than price";
+        isValid = false;
       }
 
+      // Quantity Validation
+      let quantity = document.getElementById("quantity").value.trim();
+      let quantityError = document.getElementById("quantity-name-error");
+      quantityError.innerHTML = "";
 
-
-      var quantity = document.getElementById("quantity").value
-      document.getElementById("quantity").innerHTML;
-      if (quantity === '') {
-        document.getElementById("quantity-name-error").innerHTML = "This field is required"
-        e.preventDefault()
-      }
-      else if (quantity < 0) {
-        document.getElementById("quantity-name-error").innerHTML = "quantity lessthan zero "
-        e.preventDefault()
-      }
-      else if (/^\s|\s$/.test(quantity)) {
-        document.getElementById("quantity-name-error").innerHTML = 'Space is not allowed'
-        e.preventDefault()
+      if (quantity === "") {
+        quantityError.innerHTML = "This field is required";
+        isValid = false;
+      } else if (!/^\d+$/.test(quantity) || parseInt(quantity) <= 0) {
+        quantityError.innerHTML = "Quantity must be more than 0";
+        isValid = false;
       }
 
+      // Status Validation
+      let status = document.getElementById("status")?.value.trim();
+      let statusError = document.getElementById("status-name-error");
 
-      var status = document.getElementById("status").value
-      document.getElementById("status-name-error").innerHTML;
-      if (status === '') {
-        document.getElementById("status-name-error").innerHTML = "This field is required"
-        e.preventDefault()
+      if (statusError) {
+        statusError.innerHTML = "";
+        if (status === "") {
+          statusError.innerHTML = "This field is required";
+          isValid = false;
+        }
       }
-      else if (/^\s|\s$/.test(status)) {
-        document.getElementById("status-name-error").innerHTML = 'Space is not allowed'
-        e.preventDefault()
+
+      if (!isValid) {
+        e.preventDefault(); // Stop form submission if validation fails
       }
-
-    })
-
-
+    });
 
 
     function displayImage1() {

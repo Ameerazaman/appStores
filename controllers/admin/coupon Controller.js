@@ -38,12 +38,10 @@ const addCoupon = async (req, res) => {
 
         // Generate a coupon code with 10 characters
         const couponCode = generateCouponCode(10);
-        console.log('Generated Coupon Code:', couponCode);
-        console.log("coupon reqbody", req.body.expirationDate)
+
         const today = new Date(); // Get today's date as a Date object
         const expirationDate = new Date(req.body.expirationDate); // Convert expiration date from req.body to Date object
-        
-        console.log("today", today, expirationDate);
+
         
         if (today.getTime() >= expirationDate.getTime()) {
             res.render("admin/couponcreation", { admin: true, message: "This date is not accepted... please select a future date" });
@@ -54,8 +52,7 @@ const addCoupon = async (req, res) => {
                 minAmount: req.body.minAmount,
                 expirationDate: expirationDate
             });
-            
-            console.log("datacoupon", data);
+
             res.redirect("/coupon");
         }
         

@@ -6,12 +6,14 @@ const Users = require('../models/user/usermodel');
 
 
 const verifyAdmin = (req, res, next) => {
-    
-    if (session.userid) {
-        console.log("session exist")
+ 
+    if (req.session.userid) {
+     
+        console.log(session.userid,"session.userid")
         next()
     }
     else {
+     
         res.render('admin/login',{admin:true})
     }
 }

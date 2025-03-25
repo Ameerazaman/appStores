@@ -23,7 +23,7 @@ const getOffer = async (req, res) => {
 
 const addOffer=async(req,res)=>{
     try{
-        console.log("req.body of add offer",req.body)
+   
         const data=await referaloffer.create({referalDiscount:req.body.offer})
         res.render("admin/offer",{admin:true,data})
 

@@ -7,7 +7,7 @@ const category = require('../../models/admin/categorymodel')
 //Get Catogary Page
 const getCategory = async (req, res) => {
   const data = await category.find().lean();
-    console.log(data);
+ 
     res.render('admin/category', { admin: true, data })
 }
 //get addcatogary page
@@ -16,7 +16,7 @@ const getAddcategory = async (req, res) => {
 }
 //post catogary page
 const doAddcategory = async (req, res) => {
-    console.log(req.body)
+    
     const filepath = req.file.filename
     let existcategory =  await category.findOne({
         category: { $regex: new RegExp(req.body.category, "i") },
@@ -37,7 +37,7 @@ const doAddcategory = async (req, res) => {
 
 const unlistCategory= async (req, res) => {
     try {
-        console.log("unlist")
+      
       await category.findOneAndUpdate(
         { _id: req.params.id },
         { $set: { isUnlist: false } }
@@ -54,7 +54,7 @@ const unlistCategory= async (req, res) => {
 
   const listCategory= async (req, res) => {
     try {
-        console.log("list")
+       
       await category.findOneAndUpdate(
         { _id: req.params.id },
         { $set: { isUnlist: true } }
@@ -66,7 +66,7 @@ const unlistCategory= async (req, res) => {
   }
 //Delete category//
 const deleteCategory = async (req, res) => {
-    console.log("delete category")
+  
     var id = req.params.id;
 
     //await deleteUser(id)
@@ -77,7 +77,7 @@ const deleteCategory = async (req, res) => {
 // Get edit data//
 const getEditcategory = async (req, res) => {
     try {
-        console.log("edit called")
+        
         var id = req.params.id
         const data = await category.findOne({ _id: id }).lean()
         console.log(data)
@@ -100,7 +100,7 @@ const postEditCategory = async (req, res) => {
         
             console.log(req.params.id)
             await category.find({ _id:id }).lean()
-            console.log("req.body",req.body)
+          
             const output = await category.findByIdAndUpdate({ _id:id }, {category: req.body.category,offer:req.body.offer, description: req.body.description})
     
             res.redirect("/admin/category")
@@ -113,7 +113,7 @@ const postEditCategory = async (req, res) => {
 }
 ///get edit category
 const getEditCategoryImg = async (req, res) => {
-    console.log("edit called")
+
     var id = req.params.id
     const data = await category.findOne({ _id: id }).lean()
     console.log(data)
@@ -122,9 +122,9 @@ const getEditCategoryImg = async (req, res) => {
 //post edit category image 
 const postEditCategoryImg = async (req, res) => {
 
-    console.log("edit image",req.file.image)
+
     const catoId = req.params.id;
-    console.log(catoId)
+ 
     const filepath = req.file.filename
     const categori = await category.findByIdAndUpdate(catoId, { image: filepath })
     res.redirect("/admin/category")

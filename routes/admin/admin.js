@@ -87,7 +87,21 @@ router.get("/product-detail/:id",verifyAdmin,productDetailPage)
 ///**********************************Catogary *********************************/
 
 
-router.get('/category',verifyAdmin,getCategory)
+// router.get('/category',verifyAdmin,getCategory)
+
+router.get('/category', (req, res, next) => {
+    console.log("🔍 verifyAdmin middleware is being executed...");
+
+    verifyAdmin(req, res, (err) => {
+        if (err) {
+            console.log("❌ verifyAdmin rejected the request:", err.message);
+            return res.status(403).json({ message: err.message });
+        }
+        console.log("✅ verifyAdmin passed, proceeding to getCategory...");
+        next();
+    });
+}, getCategory);
+
 //get add product
 router.get('/add-category',verifyAdmin,getAddcategory)
 //Post catogary in database

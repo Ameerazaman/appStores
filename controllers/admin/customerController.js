@@ -8,7 +8,7 @@ const getCustomers= async (req, res) => {
 
     try {
       const data = await User.find().lean();
-      console.log(data);
+ 
       res.render('admin/customers', { admin: true, data });
     } catch (error) {
       console.log("error in get customers")
@@ -19,7 +19,7 @@ const getCustomers= async (req, res) => {
 
 const unblockCustomers= async (req, res) => {
   try {
-      console.log("unlist")
+
     await User.findOneAndUpdate(
       { _id: req.params.id },
       { $set: { isBlocked: false } }
@@ -36,7 +36,7 @@ const unblockCustomers= async (req, res) => {
 
 const blockCustomer= async (req, res) => {
   try {
-      console.log("list")
+
     await User.findOneAndUpdate(
       { _id: req.params.id },
       { $set: { isBlocked: true } }

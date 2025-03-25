@@ -13,18 +13,18 @@ const getDashboard = async (req, res) => {
     try {
         if (session) {
             const checkorder = await Order.findOne({ status: 'delivered' })
-            console.log(checkorder, "checkorder")
+           
             if (checkorder) {
                 // *************Find total revenue and total price***************
                 const nonCanceledOrders = await Order.find({ status: { $eq: 'delivered' } });
-                console.log(nonCanceledOrders, "revenue dsh")
+               
                 // Calculate total price
                 let total = 0;
                 nonCanceledOrders.forEach(order => {
                     total += order.totalPrice;
                 });
                 const totalrevenue = ((total * 30) / 100)
-                console.log(totalrevenue, "totalRevenue")
+               
                 ////////////////////////////////////
                 // *************************find total sales****************
 
@@ -63,7 +63,7 @@ const getDashboard = async (req, res) => {
                 const sales = totalProductsCount[0].totalProductsCount
                 const totalSales = JSON.stringify([totalrevenue])
                 const label = JSON.stringify(["totalrevenue"])
-                console.log("label", label, "totalsales", totalSales)
+               
                 const type = "Total"
 
                 // totalProductsCount.length > 0 ? totalProductsCount[0].totalProductsCount : 0;
@@ -141,7 +141,7 @@ const getDashboard = async (req, res) => {
                     },
                 ]);
 
-                console.log(topSellingProducts, "top sales")
+              
 
                 res.render('admin/dashboard', { topSellingProducts, categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalrevenue, totalUsers, sales, totalSales, type, label });
             }
@@ -193,7 +193,7 @@ const getSales = async (req, res) => {
             },
         ]);
 
-        console.log(topSellingProducts, "top sales")
+        
 
         const today = new Date().toDateString();
         const header = "Daily Sales"
@@ -207,7 +207,7 @@ const getSales = async (req, res) => {
                 total += order.totalPrice;
             });
             const totalrevenue = ((total * 30) / 100)
-            console.log("total revenue", totalrevenue)
+            
             if (totalrevenue == 0) {
                 const Message = "Today not Sale anything"
                 res.render("admin/dashboard", { admin: true, Message, header })
@@ -326,7 +326,7 @@ const getSales = async (req, res) => {
                     },
                 ]);
 
-                console.log(topSellingProducts, "top sales")
+            
 
                 res.render('admin/dashboard', { topSellingProducts, categoryWiseRevenue, admin: true, header, chartData, chartLabels, totalUsers, sales, totalrevenue, totalSales, type, label });
             }
@@ -427,12 +427,10 @@ const getSales = async (req, res) => {
 
             const Today = new Date(); // Get the current date as a Date object
             const endDate = new Date(Today.getTime() - (30 * 24 * 60 * 60 * 1000)); // Subtract 30 days from the current date
-            console.log("today", Today);
-            console.log("endDate", endDate);
+          
             var startDate = Today.toDateString()
             var lastDate = endDate.toDateString()
-            console.log(lastDate, "latsdate")
-            console.log("start", startDate, "end", lastDate, "today", today)
+       
             const categoryWiseRevenue = await Order.aggregate([
                 {
                     $match: {
@@ -466,14 +464,14 @@ const getSales = async (req, res) => {
 
             var pieChartLabels = [];
             var pieChartData = [];
-            console.log("monthly revenure", categoryWiseRevenue)
+          
             categoryWiseRevenue.forEach(item => {
                 pieChartLabels.push(item.category);
                 pieChartData.push(item.totalAmount);
             });
             var chartLabels = JSON.stringify(pieChartLabels)
             var chartData = JSON.stringify(pieChartData)
-            console.log("monthly", chartData, chartLabels)
+           
             const topSellingProducts = await Order.aggregate([
                 { $match: { status: "delivered" } },
                 { $unwind: "$products" },
@@ -502,8 +500,6 @@ const getSales = async (req, res) => {
                 },
             ]);
 
-            console.log(topSellingProducts, "top sales")
-
             res.render('admin/dashboard', { topSellingProducts, categoryWiseRevenue, admin: true, chartData, chartLabels, totalrevenue, header, totalUsers, totalSales, type, label });
 
         }
@@ -530,12 +526,9 @@ const getSales = async (req, res) => {
             });
             const Today = new Date(); // Get the current date as a Date object
             const endDate = new Date(Today.getTime() - (7 * 24 * 60 * 60 * 1000));
-            console.log("today", today)
 
-            console.log("enddata", endDate)
             var startDate = Today.toDateString()
             var lastDate = endDate.toDateString()
-            console.log("start", startDate, "end", lastDate, "today", today)
             const categoryWiseRevenue = await Order.aggregate([
                 {
                     $match: {
@@ -565,9 +558,6 @@ const getSales = async (req, res) => {
                     }
                 }
             ]);
-
-            console.log("category", categoryWiseRevenue);
-
 
             var pieChartLabels = [];
             var pieChartData = [];
@@ -655,21 +645,20 @@ const getSales = async (req, res) => {
                     }
                 }
             ]);
-            console.log("productcount", productCountInDeliveredOrders)
             res.render("admin/dashboard", { topSellingProducts, categoryWiseRevenue, admin: true, chartLabels, chartData, sales, totalrevenue, type, header, totalSales, label })
 
         }
         if (req.params.sale === "total") {
 
             const nonCanceledOrders = await Order.find({ status: { $eq: 'delivered' } });
-            console.log(nonCanceledOrders, "revenue dsh")
+            
             // Calculate total price
             let total = 0;
             nonCanceledOrders.forEach(order => {
                 total += order.totalPrice;
             });
             const totalrevenue = ((total * 30) / 100)
-            console.log(totalrevenue, "totalRevenue")
+           
             ////////////////////////////////////
             // *************************find total sales****************
 
@@ -708,7 +697,6 @@ const getSales = async (req, res) => {
             const sales = totalProductsCount[0].totalProductsCount
             const totalSales = JSON.stringify([totalrevenue])
             const label = JSON.stringify(["totalrevenue"])
-            console.log("label", label, "totalsales", totalSales)
             const type = "Total"
 
             // totalProductsCount.length > 0 ? totalProductsCount[0].totalProductsCount : 0;
@@ -781,7 +769,6 @@ const customDate = async (req, res) => {
 
             const nonCanceledOrders = await Order.find({ orderedAt: customDate, status: { $ne: 'Canceled' } });
             // const nonCanceledOrders = await Order.find({ orderedAt: customDate});
-            console.log("noncanceled ordera", nonCanceledOrders)
             // Calculate total price
             let total = 0;
             nonCanceledOrders.forEach(order => {
@@ -893,7 +880,6 @@ const customDate = async (req, res) => {
 
 const salesReportDashboard = async (req, res) => {
     try {
-        console.log("sales report");
         const data = await Order.find({ status: { $eq: "delivered" } }).lean()
         req.session.totaldata = data
         const header = "Total"
@@ -909,13 +895,13 @@ const getSalesReport = async (req, res) => {
     try {
         // Daily sales report
         if (req.params.report == "daily") {
-            console.log("daily")
+            
             const today = new Date().toDateString();
             const check = await Order.findOne({ orderedAt: today, status: "delivered" }).lean()
 
             if (check) {
                 const data = await Order.find({ orderedAt: today, status: "delivered" }).lean()
-                console.log("data", data)
+                
                 const reportdata = await Order.aggregate([
                     {
                         $match: {
@@ -1012,7 +998,7 @@ const getSalesReport = async (req, res) => {
             ]);
 
             const overalldata = reportdata
-            console.log(reportdata, "ovlldata")
+     
 
             const header = "Monthly"
 
@@ -1071,7 +1057,7 @@ const getSalesReport = async (req, res) => {
             ]);
             req.session.monthlydata = monthlydata
             req.session.monthlyOveralldata = overalldata
-            console.log("data monthly", monthlydata)
+       
 
             res.render("admin/sales-report", {
                 admin: true, header, overalldata, monthlydata
@@ -1145,8 +1131,6 @@ const getSalesReport = async (req, res) => {
                 }
             ]);
 
-            console.log("Weekly orders", weeklydata);
-
             const header = "Weekly"
             const th = "Week"
             req.session.weeklyOveralldata = overalldata
@@ -1182,7 +1166,6 @@ const getSalesReport = async (req, res) => {
                     }
                 }
             ]);
-            console.log("yearlyoverall", overalldata)
             const yearlydata = await Order.aggregate([
                 {
                     $match: {
@@ -1213,7 +1196,7 @@ const getSalesReport = async (req, res) => {
                     }
                 }
             ]);
-            console.log("yeraly data", yearlydata)
+       
             const header = "Yearly"
             req.session.yearldata = yearlydata
             req.session.yearlyOveralldata = overalldata
@@ -1231,15 +1214,11 @@ const getSalesReport = async (req, res) => {
 
 const customDateReport = async (req, res) => {
     try {
-        console.log("req.body.satrtdate", req.body.startdate)
-        console.log("req.body.enddate", req.body.enddate)
+    
         req.session.startDate = req.body.startaate
         req.session.endDate = req.body.enddate
         const startDate = new Date(req.body.startdate);
         const endDate = new Date(req.body.enddate);
-
-        console.log("Start Date:", startDate);
-        console.log("End Date:", endDate);
 
 
         const overalldata = await Order.aggregate([
@@ -1327,10 +1306,10 @@ const customDateReport = async (req, res) => {
                 }
             }
         ]);
-        console.log("customdata", customdata)
+       
         req.session.customdateoveralldata = overalldata
         const header = `Overall Sales upto ${req.body.startdate} to ${req.body.enddate} `
-        console.log("overall data in cusomdate", overalldata)
+
         res.render("admin/sales-report", { admin: true, header, overalldata, customdata })
 
     }
@@ -1346,7 +1325,7 @@ const downloadSalesReport = async (req, res) => {
         // daaily
 
         if (req.params.period == "Daily") {
-            console.log("paramas monthly", req.params.period)
+       
             const dailydata = req.session.dailyOveralldata
 
 
@@ -1355,8 +1334,7 @@ const downloadSalesReport = async (req, res) => {
             const jsons2csvParser = new Parser()
             const csv = jsons2csvParser.parse(data)
 
-            console.log("csv", csv)
-
+         
             const filePath = 'data.csv';
 
             // Write CSV data to a file
@@ -1374,7 +1352,7 @@ const downloadSalesReport = async (req, res) => {
 
         // weekly report
         else if (req.params.period == "Weekly") {
-            console.log("paramas monthly", req.params.period)
+        
             const weeklydata = req.session.weeklyOveralldata
             const overalldata = req.session.monthlyOveralldata
 
@@ -1382,8 +1360,6 @@ const downloadSalesReport = async (req, res) => {
 
             const jsons2csvParser = new Parser()
             const csv = jsons2csvParser.parse(data)
-
-            console.log("csv", csv)
 
             const filePath = 'data.csv';
 
@@ -1401,7 +1377,7 @@ const downloadSalesReport = async (req, res) => {
         }
 
         else if (req.params.period == "Total") {
-            console.log("paramas monthly", req.params.period)
+       
             const totaldata = req.session.totaldata
 
 
@@ -1410,7 +1386,6 @@ const downloadSalesReport = async (req, res) => {
             const jsons2csvParser = new Parser()
             const csv = jsons2csvParser.parse(data)
 
-            console.log("csv", csv)
 
             const filePath = 'data.csv';
 
@@ -1430,7 +1405,6 @@ const downloadSalesReport = async (req, res) => {
         // monthly
         else if (req.params.period == "Monthly") {
 
-            console.log("paramas monthly", req.params.period)
             const monthlydata = req.session.monthlyOveralldata
             const overalldata = req.session.monthlyOveralldata
 
@@ -1439,7 +1413,6 @@ const downloadSalesReport = async (req, res) => {
             const jsons2csvParser = new Parser()
             const csv = jsons2csvParser.parse(data)
 
-            console.log("csv", csv)
 
             const filePath = 'data.csv';
 
@@ -1458,7 +1431,7 @@ const downloadSalesReport = async (req, res) => {
 
         // yeraly
         else if (req.params.period == "Yearly") {
-            console.log("paramas monthly", req.params.period)
+        
             const yearldata = req.session.yearlyOveralldata
             const overalldata = req.session.monthlyOveralldata
 
@@ -1467,7 +1440,6 @@ const downloadSalesReport = async (req, res) => {
             const jsons2csvParser = new Parser()
             const csv = jsons2csvParser.parse(data)
 
-            console.log("csv", csv)
 
             const filePath = 'data.csv';
 
@@ -1485,7 +1457,6 @@ const downloadSalesReport = async (req, res) => {
         }
 
         else {
-            console.log("paramas customdate", req.params.period)
             const customdatereport = req.session.customdateoveralldata
 
 
@@ -1494,7 +1465,6 @@ const downloadSalesReport = async (req, res) => {
             const jsons2csvParser = new Parser()
             const csv = jsons2csvParser.parse(data)
 
-            console.log("csv", csv)
 
             const filePath = 'data.csv';
 
@@ -1528,7 +1498,7 @@ const downloadSalesReport = async (req, res) => {
 
 const downloadSalesReportPdf = async (req, res) => {
     try {
-        console.log(req.params);
+ 
 
         if (req.params.period === "Monthly") {
             monthlyOveralldata = req.session.monthlyOveralldata
@@ -1547,8 +1517,6 @@ const downloadSalesReportPdf = async (req, res) => {
                 row.push(i.month);
                 table.push(row)
             }
-
-            console.log("table", table)
             const { jsPDF } = require('jspdf')
             require('jspdf-autotable')
 
@@ -1565,7 +1533,7 @@ const downloadSalesReportPdf = async (req, res) => {
         // daily sales
         else if (req.params.period == "Daily") {
             dailyOveralldata = req.session.dailyOveralldata
-            console.log("pdf", dailyOveralldata)
+
             let table = []
 
             for (let i of dailyOveralldata) {
@@ -1581,8 +1549,6 @@ const downloadSalesReportPdf = async (req, res) => {
                 table.push(row)
             }
 
-            console.log("table", table)
-            console.log("table", table)
             const { jsPDF } = require('jspdf')
             require('jspdf-autotable')
 
@@ -1592,7 +1558,7 @@ const downloadSalesReportPdf = async (req, res) => {
                 body: table,
             })
             doc.save('table.pdf')
-            console.log('./table.pdf generated')
+     
 
             res.download('table.pdf')
         }
@@ -1601,7 +1567,7 @@ const downloadSalesReportPdf = async (req, res) => {
         // total
         else if (req.params.period == "Total") {
             const totaldata = req.session.totaldata
-            console.log("pdf", totaldata)
+
             let table = []
 
             for (let i of totaldata) {
@@ -1619,7 +1585,7 @@ const downloadSalesReportPdf = async (req, res) => {
                 row.push(i.coupondiscount);
                 table.push(row)
             }
-            console.log("table", table)
+
             const { jsPDF } = require('jspdf')
             require('jspdf-autotable')
 
@@ -1636,7 +1602,7 @@ const downloadSalesReportPdf = async (req, res) => {
         // yearly
         else if (req.params.period == "Yearly") {
             yearlyOveralldata = req.session.yearlyOveralldata
-            console.log("pdf", yearlyOveralldata)
+
             let table = []
 
             for (let i of yearlyOveralldata) {
@@ -1661,7 +1627,6 @@ const downloadSalesReportPdf = async (req, res) => {
                 body: table,
             })
             doc.save('table.pdf')
-            console.log('./table.pdf generated')
 
             res.download('table.pdf')
         }
@@ -1669,13 +1634,11 @@ const downloadSalesReportPdf = async (req, res) => {
         // Weekly 
         else if (req.params.period == "Weekly") {
             weeklyOveralldata = req.session.weeklyOveralldata
-            console.log("pdf", weeklyOveralldata)
+
             let table = []
 
             for (let i of weeklyOveralldata) {
                 let row = [];
-
-
                 row.push(i.totalDiscount);
                 row.push(i.totalSalesCount);
                 row.push(i.totalOrderedAmount);
@@ -1685,8 +1648,6 @@ const downloadSalesReportPdf = async (req, res) => {
                 table.push(row)
             }
 
-            console.log("table", table)
-            console.log("table", table)
             const { jsPDF } = require('jspdf')
             require('jspdf-autotable')
 
@@ -1696,15 +1657,13 @@ const downloadSalesReportPdf = async (req, res) => {
                 body: table,
             })
             doc.save('table.pdf')
-            console.log('./table.pdf generated')
-
             res.download('table.pdf')
         }
 
 
         else {
             customdateOverallData = req.session.customdateoveralldata
-            console.log("pdf", customdateOverallData)
+
             let table = []
 
             for (let i of customdateOverallData) {
@@ -1720,8 +1679,6 @@ const downloadSalesReportPdf = async (req, res) => {
                 table.push(row)
             }
 
-            console.log("table", table)
-            console.log("table", table)
             const { jsPDF } = require('jspdf')
             require('jspdf-autotable')
 
@@ -1731,7 +1688,7 @@ const downloadSalesReportPdf = async (req, res) => {
                 body: table,
             })
             doc.save('table.pdf')
-            console.log('./table.pdf generated')
+     
 
             res.download('table.pdf')
         }
@@ -1741,9 +1698,6 @@ const downloadSalesReportPdf = async (req, res) => {
         console.log("Error in downloading sales report PDF in dashboard controller:", error);
     }
 }
-
-
-
 
 module.exports = {
     getDashboard, getSales, customDate,

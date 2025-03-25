@@ -485,9 +485,9 @@
         document.getElementById("quantity-name-error").innerHTML = "This field is required"
         e.preventDefault()
       }
-      else if (quantity < 0) {
-        document.getElementById("quantity-name-error").innerHTML = "quantity lessthan zero "
-        e.preventDefault()
+     else if (!/^\d+$/.test(quantity) || parseInt(quantity) <= 0) {
+        quantityError.innerHTML = "Quantity must be more than 0";
+        isValid = false;
       }
       else if (/^\s|\s$/.test(quantity)) {
         document.getElementById("quantity-name-error").innerHTML = 'Space is not allowed'

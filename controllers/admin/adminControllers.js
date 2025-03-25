@@ -48,10 +48,18 @@ const postLogin = async (req, res) => {
 
 ///Logout
 const adminLogout = async (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          console.log("❌ Error destroying session:", err);
+          return res.status(500).json({ message: "Logout failed" });
+      }
 
-  req.session.destroy()
-  console.log("destroy")
-  console.log(req.session)
-  res.redirect('/admin')
-}
+      console.log("✅ Session destroyed successfully");
+
+      res.clearCookie('connect.sid', { path: '/' }); // Make sure the cookie is cleared
+      res.redirect('/admin'); // Redirect after clearing session
+  });
+};
+
+
 module.exports = { doLogin, postLogin, adminLogout };

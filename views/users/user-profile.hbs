@@ -112,9 +112,10 @@
       border-radius: 10px;
       color: aliceblue;
     }
-   nav {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+
+    nav {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -128,10 +129,10 @@
       <nav style="background-color: rgb(246, 246, 246);" class="nav">
 
         <div>
-         
+
 
           <div class="option2 nav-option">
-            
+
             <i class="fa fa-user"></i>
             <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile">
               <h5>Profile</h5>
@@ -139,36 +140,36 @@
           </div>
 
           <div class="option2 nav-option">
-           
+
             <i class="fa fa-address-book"></i>
             <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/address-mgt">
               <h5>Address</h5>
             </a>
-          </div>  
+          </div>
           <div class="nav-option logout">
-            
+
             <i class="fa fa-tag"></i>
             <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/offer">
               <h5>Offer</h5>
             </a>
           </div>
           <div class="nav-option logout">
-           
+
             <i class="fa fa-heart"></i>
             <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/wishlist">
               <h5>Wishlist</h5>
             </a>
           </div>
           <div class="nav-option logout">
-           
+
             <i class="fa fa-clipboard"></i>
             <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/order">
               <h5>Order</h5>
             </a>
           </div>
           <div class="nav-option option5">
-           
-           <i class="fa fa-credit-card"></i>
+
+            <i class="fa fa-credit-card"></i>
             <a style="text-decoration: none;color: rgb(36, 32, 32);" href="/user-profile/wallet">
               <h5>Wallet</h5>
             </a>
@@ -227,16 +228,16 @@
           <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
         </div>
       </div> --}}
- 
+
       <div class="report-container">
         <div class="report-header">
           <h5 class="recent-Articles">Personal information</h5>
-          
+
           <div style="margin-left: 50%; width:auto;" class="div-button" onclick="NewAddress()"><button
               class="view">Change password</button></div><br>
         </div>
         <section style="padding-top: 50px; height: auto;" id="s2">
-         
+
           <form action="/user-profile/change-password/{{existuser._id}}" style="padding-left: 30%px;" method="post"
             id="check-form">
             <section id="Address" style="display: none;">
@@ -265,14 +266,14 @@
             </section>
           </form>
           {{!-- Personal information --}}
-          <form style="padding-left: 30px;,padding-right: 30px;" action="/user-profile/personal-information" method="post"
-            id="checkout-form">
+          <form style="padding-left: 30px;,padding-right: 30px;" action="/user-profile/personal-information"
+            method="post" id="checkout-form">
             <section id="Address">
               {{#if result}}
               <div style="display: flex;">
                 <h5 style="color: blue;">Edit Personal information</h35>
 
-             
+
               </div>
               {{else}}
               <h5 style="color: blue;">Personal Information</h5>
@@ -346,8 +347,8 @@
               </div>
 
               <button class="view" type="submit">Save</button>
-                 <button class="view" style="justify-content: end;" type="submit"> <a
-                  style="color: white;"  href="/user-profile/delete/{{result._id}}">Delete</a></button>
+              <button class="view" style="justify-content: end;" type="submit"> <a style="color: white;"
+                  href="/user-profile/delete/{{result._id}}">Delete</a></button>
             </section>
           </form>
 
@@ -358,90 +359,94 @@
 
   <script>
     document.getElementById("checkout-form").addEventListener('submit', (e) => {
-            var fullname = document.getElementById("fullname").value;
-            var fullnameError = document.getElementById("fullname-error");
-            if (fullname=== '') {
-                document.getElementById("fullname-error").innerHTML = 'This field is required';
-                e.preventDefault();
-            }
-            else if (/^\s|\s$/.test(fullname)) { // Check for spaces at the beginning or end
-                document.getElementById("fullname-error").innerHTML = 'Spaces at beginning or end are not allowed';
-                e.preventDefault();
-            }
+      var fullname = document.getElementById("fullname").value;
+      var fullnameError = document.getElementById("fullname-error");
+      if (fullname === '') {
+        document.getElementById("fullname-error").innerHTML = 'This field is required';
+        e.preventDefault();
+      }
+      else if (/^\s|\s$/.test(fullname)) { // Check for spaces at the beginning or end
+        document.getElementById("fullname-error").innerHTML = 'Spaces at beginning or end are not allowed';
+        e.preventDefault();
+      }
 
-            var address = document.getElementById("address").value;
-            document.getElementById("address-error").innerHTML;
-            if (address=== '') {
-                document.getElementById("address-error").innerHTML = 'This field is required'
-                e.preventDefault()
-            }
-            else if (/^\s|\s$/.test(address)) {
-                document.getElementById("address-error").innerHTML = 'space are not allowed'
-                e.preventDefault()
-            }
-
-
-            var city = document.getElementById("city").value;
-            document.getElementById("city-error").innerHTML;
-            if (city=== '') {
-                document.getElementById("city-error").innerHTML = 'This field is required'
-                e.preventDefault()
-            }
-           else if (/^\s|\s$/.test(city)) {
-                document.getElementById("city-error").innerHTML = 'space are not allowed'
-                e.preventDefault()
-            }
+      var address = document.getElementById("address").value;
+      document.getElementById("address-error").innerHTML;
+      if (address === '') {
+        document.getElementById("address-error").innerHTML = 'This field is required'
+        e.preventDefault()
+      }
+      else if (/^\s|\s$/.test(address)) {
+        document.getElementById("address-error").innerHTML = 'space are not allowed'
+        e.preventDefault()
+      }
 
 
-            var state = document.getElementById("state").value;
-            document.getElementById("state-error").innerHTML;
-            if (state === '') {
-                document.getElementById("state-error").innerHTML = 'This field is required'
-                e.preventDefault()
-            }
-            else if (/^\s|\s$/.test(state)) {
-                document.getElementById("state-error").innerHTML = 'space are not allowed'
-                e.preventDefault()
-            }
+      var city = document.getElementById("city").value;
+      document.getElementById("city-error").innerHTML;
+      if (city === '') {
+        document.getElementById("city-error").innerHTML = 'This field is required'
+        e.preventDefault()
+      }
+      else if (/^\s|\s$/.test(city)) {
+        document.getElementById("city-error").innerHTML = 'space are not allowed'
+        e.preventDefault()
+      }
 
 
-            var email = document.getElementById("email").value;
-            document.getElementById("email-error").innerHTML;
-            if (email === '') {
-                document.getElementById("email-error").innerHTML = 'This field is required'
-                e.preventDefault()
-            }
-            else if (/^\s|\s$/.test(email)) {
-                document.getElementById("email-error").innerHTML = 'space are not allowed'
-                e.preventDefault()
-            }
-            var phone = document.getElementById("phone").value;
-            document.getElementById("phone-error").innerHTML;
-            if (phone === '') {
-                document.getElementById("phone-error").innerHTML = 'This field is required'
-                e.preventDefault()
-            }
-            else if (phone.length !== 10) {
-                document.getElementById("phone-error").innerHTML = 'Required 10 digits'
-                e.preventDefault()
-            }
-            else if (/\s/.test.test(phone)) {
-                document.getElementById("phone-error").innerHTML = 'space are not allowed'
-                e.preventDefault()
-            }
+      var state = document.getElementById("state").value;
+      document.getElementById("state-error").innerHTML;
+      if (state === '') {
+        document.getElementById("state-error").innerHTML = 'This field is required'
+        e.preventDefault()
+      }
+      else if (/^\s|\s$/.test(state)) {
+        document.getElementById("state-error").innerHTML = 'space are not allowed'
+        e.preventDefault()
+      }
 
 
-            var postalcode = document.getElementById("postal-code").value;
-            document.getElementById("postalcode-error").innerHTML;
-            if (postalcode.trim() === '') {
-                document.getElementById("postalcode-error").innerHTML = 'This field is required'
-                e.preventDefault()
-            }
-            else if (/\s/.test(postalcode)) {
-                document.getElementById("postalcode-error").innerHTML = 'space are not allowed'
-                e.preventDefault()
-            }
-        })
+      var email = document.getElementById("email").value;
+      document.getElementById("email-error").innerHTML;
+      if (email === '') {
+        document.getElementById("email-error").innerHTML = 'This field is required'
+        e.preventDefault()
+      }
+      else if (/^\s|\s$/.test(email)) {
+        document.getElementById("email-error").innerHTML = 'space are not allowed'
+        e.preventDefault()
+      }
+      var phone = document.getElementById("phone").value;
+      document.getElementById("phone-error").innerHTML;
+      if (phone === '') {
+        document.getElementById("phone-error").innerHTML = 'This field is required'
+        e.preventDefault()
+      }
+      else if (phone.length !== 10) {
+        document.getElementById("phone-error").innerHTML = 'Required 10 digits'
+        e.preventDefault()
+      }
+      else if (/\s/.test.test(phone)) {
+        document.getElementById("phone-error").innerHTML = 'space are not allowed'
+        e.preventDefault()
+      }
+      else if (!/^\d{10}$/.test(phone) || /^0{10}$/.test(phone)) {
+        document.getElementById("phone-error").innerHTML = 'Enter a valid 10-digit phone number';
+        e.preventDefault();
+      }
+
+
+      var postalcode = document.getElementById("postal-code").value;
+      document.getElementById("postalcode-error").innerHTML;
+      if (postalcode.trim() === '') {
+        document.getElementById("postalcode-error").innerHTML = 'This field is required'
+        e.preventDefault()
+      }
+      else if (/\s/.test(postalcode)) {
+        document.getElementById("postalcode-error").innerHTML = 'space are not allowed'
+        e.preventDefault()
+      }
+    })
     function NewAddress() {
       var x = document.getElementById("Address");
       if (x.style.display === "none") {
@@ -458,7 +463,7 @@
         document.getElementById("password-error").innerHTML = 'This field is required';
         e.preventDefault()
       }
-      else if (/\s/.test(password)){
+      else if (/\s/.test(password)) {
         document.getElementById("password-error").innerHTML = 'Space are not allowed';
         e.preventDefault()
       }
@@ -469,7 +474,7 @@
         document.getElementById("new-password-error").innerHTML = 'This field is required';
         e.preventDefault()
       }
-      else if (/\s/.test(newpassword)){
+      else if (/\s/.test(newpassword)) {
         document.getElementById("new-password-error").innerHTML = 'Space are not allowed';
         e.preventDefault()
       }
@@ -485,7 +490,7 @@
         document.getElementById("confirm-password-error").innerHTML = 'Password is not match';
         e.preventDefault()
       }
-      else if (/\s/.test(confirm)){
+      else if (/\s/.test(confirm)) {
         document.getElementById("confirm-password-error").innerHTML = 'Space are not allowed';
         e.preventDefault()
       }

@@ -9,7 +9,7 @@ const getProduct = async (req, res) => {
 }
 // get product page//
 const getAddProduct = async (req, res) => {
-    console.log("called add product")
+
     const categorydata = await category.find({ isUnlist: { $ne: true } }).lean()
     res.render('admin/add-product', { categorydata })
 }
@@ -19,13 +19,13 @@ const doAddProduct = async (req, res) => {
 
 
     const checkProduct = await products.findOne({ product: { $regex: new RegExp(req.body.product, "i") } });
-    console.log(checkProduct, "check")
+
     if (checkProduct) {
         const message = "Product already exist,please add another product"
         res.render("admin/add-product", { message })
     }
     else {
-        console.log("product creation")
+
         const pro = await products.create({
             product: req.body.product,
             category: req.body.category,
@@ -39,7 +39,7 @@ const doAddProduct = async (req, res) => {
             description: req.body.description,
 
         })
-        console.log("product created", pro)
+ 
 
         res.redirect('/admin/product')
 
