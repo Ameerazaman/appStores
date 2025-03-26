@@ -146,14 +146,16 @@ const postSignup = async (req, res) => {
 
                 console.log(req.session.user._id)
                 req.session.otp = generateOTP(6)
+                console.log(req.session.otp,"otp")
+              
                 async function main() {
                     const transport = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
                             // user: 'fathimathameeraap@gmail.com',
                             // pass: 'eply owri jdtq pgse',
-                            user: process.env.user,
-                            pass: process.env.pass
+                            user: process.env.TRANSPORTER_EMAIL,
+                            pass: process.env.TRANSPORTER_PASS,
                         }
                     })
                     const info = await transport.sendMail({
@@ -161,10 +163,10 @@ const postSignup = async (req, res) => {
                         to: email,
                         // req.session.email,
                         subject: 'OTP Verification',
-                        text: `Your resend OTP for signup: ${req.session.otp}`
+                        text: `Your send OTP for signup: ${req.session.otp}`
 
                     })
-                    console.log("Resend message send " + info.messageId)
+                    console.log("send message send " + info.messageId)
                     console.log(req.session.otp)
                 }
                 main();
@@ -200,19 +202,20 @@ const otpSubmit = async (req, res) => {
 //Ressend otp//
 const resendOtp = function (req, res) {
     req.session.otp = generateOTP(6)
+    console.log(req.session.otp ,"otp")
     var email = req.session.email
     async function main() {
         const transport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.user,
-                pass: process.env.pass
+                user: process.env.TRANSPORTER_EMAIL,
+                pass: process.env.TRANSPORTER_PASS,
             }
         })
         const info = await transport.sendMail({
             from: 'fathimathameeraap@gmail.com',
             to: email,
-            // req.session.email,
+       
             subject: 'OTP Verification',
             text: `Your resend OTP for signup: ${req.session.otp}`
 
@@ -235,18 +238,19 @@ const getForgotOtp = async (req, res) => {
     const data = await User.findOne({ email: req.body.email })
     if (data) {
         req.session.otp = generateOTP(6)
+        console.log(req.session.otp )
         async function main() {
             const transport = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'fathimathameeraap@gmail.com',
-                    pass: 'eply owri jdtq pgse'
+                    user: process.env.TRANSPORTER_EMAIL,
+                    pass: process.env.TRANSPORTER_PASS,
                 }
             })
             const info = await transport.sendMail({
                 from: 'fathimathameeraap@gmail.com',
                 to: 'fathimathameeraap@gmail.com',
-                // req.session.email,
+             
                 subject: 'OTP Verification',
                 text: `Your  OTP for forgot password: ${req.session.otp}`
 

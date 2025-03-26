@@ -86,5 +86,20 @@ app.use('/checkout',checkout)
 app.use("/user-profile",userprofile)
 app.use("/wishlist",wishlist)
 
+app.use((req, res, next) => {
+  res.status(404).render('users/404', { message: 'Page Not Found' });
+});
+
+// Global error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  
+  res.status(err.status || 500).render('users/500', {
+    message: 'Something went wrong! Please try again later.',
+     // Show stack trace only in development
+  });
+});
+
+
 const port = process.env.port||3004;
 app.listen(port, console.log("server started"))
