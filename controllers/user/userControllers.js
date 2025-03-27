@@ -110,8 +110,6 @@ const getSignup = async (req, res) => {
 const doSignup = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Hash the password before storing
-            // data.password = await bcrypt.hash(data.password, 10);
 
             // Create user in the database
             let user = await User.create(data);
