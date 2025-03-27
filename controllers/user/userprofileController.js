@@ -241,15 +241,15 @@ const getInvoice = async (req, res) => {
 
         // Map through products to get actual price, discount, and subtotal
         const products = orderdata.products.map(product => ({
-            
+
             quantity: product.quantity,
-            description:product?.product?.product|| "Unknown Product", // Extract product name
+            description: product?.product?.product || "Unknown Product", // Extract product name
             price: product.subtotal, // Price after discount
             actualPrice: product.subtotal + product.discountProduct, // Actual price before discount
             discount: product.discountProduct // Discount applied
         }));
 
-        console.log(products,"products");
+        console.log(products, "products");
 
         var data = {
             apiKey: "free",
@@ -258,7 +258,7 @@ const getInvoice = async (req, res) => {
                 quantity: prod.quantity,
                 description: `${prod.description} (Actual Price: ${prod.actualPrice}, Discount: ${prod.discount})`, // Include price details
                 price: prod.price
-                 // Discounted price
+                // Discounted price
             })),
             total: totalAmount // Set the correct total from order
         };
@@ -590,7 +590,7 @@ const walletPage = async (req, res) => {
             const debitTotal = await wallet.aggregate([
                 {
                     $match: {
-                        transactiontype: "Debit",
+                        transactiontype: "debit",
                         userId: userId
                     }
                 },
@@ -603,8 +603,11 @@ const walletPage = async (req, res) => {
                     }
                 }
             ]);
-            const total = creditTotal[0].totalCredit - debitTotal[0].totalDebit
+            console.log(debitTotal, "debitTotal")
+            // const total = creditTotal[0].totalCredit - (debitTotal.length > 0 ? debitTotal[0].totalDebit : 0);
+            const total = (creditTotal.length > 0 ? creditTotal[0].totalCredit : 0) - (debitTotal.length > 0 ? debitTotal[0].totalDebit : 0);
 
+            console.log(total, "total")
             res.render("users/wallet", { data, total, cartcount });
         }
         else {
