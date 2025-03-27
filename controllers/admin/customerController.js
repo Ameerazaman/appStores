@@ -52,7 +52,9 @@ const blockCustomer= async (req, res) => {
     const user = req.body.username
   
     const data = await User.find({ username: { $regex: user, $options: "i" } }).lean()
-    console.log(data)
-    res.render('admin/dashboard', { admin: true, data });
+ 
+
+        console.log("Search results:", data);  // Debugging
+        res.json(data); 
   }
   module.exports={getCustomers,blockCustomer,unblockCustomers,searchCustomer}

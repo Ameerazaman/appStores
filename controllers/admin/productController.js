@@ -112,7 +112,7 @@ const postEditProduct = async (req, res) => {
         price: req.body.price,
         quantity: req.body.quantity,
         description: req.body.description,
-        descount: req.body.descount,
+        discount: req.body.discount,
     })
 
     for (let i = 0; i < req.files.length; i++) {
@@ -157,6 +157,17 @@ const productDetailPage = async (req, res) => {
     }
 
 }
+
+ const searchProduct= async (req, res) => {
+
+    const productName = req.body.product
+  console.log(req.body,"productName")
+    const data = await products.find({ product: { $regex: productName, $options: "i" } }).lean()
+ 
+
+        console.log("Search results:", data);  // Debugging
+        res.json(data); 
+  }
 module.exports = {
     getAddProduct,
     doAddProduct,
@@ -166,5 +177,6 @@ module.exports = {
     listProduct,
     unListProduct,
     getProduct,
-    productDetailPage
+    productDetailPage,
+    searchProduct
 }

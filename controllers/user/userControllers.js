@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer')
 const wishlist = require('../../models/user/wishlist-model')
 const cart = require("../../models/user/add-to-cart-model")
 const Users = require('../../models/user/usermodel')
-
+const personalprofile = require('../../models/user/personalmodel')
 // generate otp//
 function generateOTP(limit) {
     var digits = '0123456789';
@@ -59,18 +59,7 @@ const homePage = async (req, res) => {
     }
 }
 
-const doSignup = (data) => {
 
-    // console.log(data);
-    return new Promise(async (resolve, reject) => {
-        // data.password=await bcrypt.hash(data.password,10)
-        await User.create(data).then((result) => {
-            resolve(result)
-            console.log("data stored", result)
-        })
-
-    })
-}
 
 // login page//
 const getLogin = async (req, res) => {
@@ -118,68 +107,83 @@ const getSignup = async (req, res) => {
 
 
 }
-// post signup page
+const doSignup = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Hash the password before storing
+            // data.password = await bcrypt.hash(data.password, 10);
+
+            // Create user in the database
+            let user = await User.create(data);
+            console.log(user, "user");
+
+            // Create personal profile
+            let createProfile = await personalprofile.create({
+                fullname: user.username,
+                email: user.email,
+                phone: user.mobile,
+                userId:user._id
+            });
+
+            resolve(user);  // Resolve the created user
+        } catch (error) {
+            console.error("Signup Error:", error);
+            reject(error);  // Reject the promise in case of error
+        }
+    });
+};
+
+// Post signup page
 const postSignup = async (req, res) => {
-    console.log(req.body.username)
+    console.log(req.body.username);
     try {
-
         let existuser = await User.findOne({ username: req.body.username });
-
 
         if (existuser) {
             console.log(existuser);
-            const message = 'User already exist.Please choose diffrent username';
-            res.render("users/signup", { message })
-            console.log("failed signup")
+            const message = 'User already exists. Please choose a different username.';
+            return res.render("users/signup", { message });
         }
-        else {
 
-            doSignup(req.body).then((result) => {
+        doSignup(req.body)
+            .then(async (user) => {
+                req.session.loggedin = true;
+                req.session.username = user.username;
+                req.session.email = user.email;
+                req.session.user = user;
+                req.session.otp = generateOTP(6);
 
-                req.session.loggedin = true
-                req.session.username = req.body.username
-                var email = req.body.email
-                req.session.email = req.body.email
-                // req.session.password=req.body.password
-                console.log(result)
-                req.session.user = result
+                console.log(req.session.otp, "otp");
 
-                console.log(req.session.user._id)
-                req.session.otp = generateOTP(6)
-                console.log(req.session.otp,"otp")
-              
-                async function main() {
-                    const transport = nodemailer.createTransport({
-                        service: 'gmail',
-                        auth: {
-                            // user: 'fathimathameeraap@gmail.com',
-                            // pass: 'eply owri jdtq pgse',
-                            user: process.env.TRANSPORTER_EMAIL,
-                            pass: process.env.TRANSPORTER_PASS,
-                        }
-                    })
-                    const info = await transport.sendMail({
-                        from: 'fathimathameeraap@gmail.com',
-                        to: email,
-                        // req.session.email,
-                        subject: 'OTP Verification',
-                        text: `Your send OTP for signup: ${req.session.otp}`
+                // Send OTP via email
+                const transport = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.TRANSPORTER_EMAIL,
+                        pass: process.env.TRANSPORTER_PASS,
+                    }
+                });
 
-                    })
-                    console.log("send message send " + info.messageId)
-                    console.log(req.session.otp)
-                }
-                main();
-                res.render("users/verification")
+                const info = await transport.sendMail({
+                    from: process.env.TRANSPORTER_EMAIL,
+                    to: user.email,
+                    subject: 'OTP Verification',
+                    text: `Your OTP for signup: ${req.session.otp}`
+                });
 
+                console.log("OTP Sent:", info.messageId);
 
+                res.render("users/verification");
             })
-        }
+            .catch((error) => {
+                console.error("Signup process failed:", error);
+                res.render("users/signup", { message: "Signup failed. Please try again." });
+            });
+    } catch (error) {
+        console.error("Signup error:", error);
+        res.render("users/signup", { message: "An error occurred during signup." });
     }
-    catch (error) {
-        console.log("signup error")
-    }
-}
+};
 //otp submit
 const otpSubmit = async (req, res) => {
 
@@ -202,7 +206,7 @@ const otpSubmit = async (req, res) => {
 //Ressend otp//
 const resendOtp = function (req, res) {
     req.session.otp = generateOTP(6)
-    console.log(req.session.otp ,"otp")
+    console.log(req.session.otp, "otp")
     var email = req.session.email
     async function main() {
         const transport = nodemailer.createTransport({
@@ -215,7 +219,7 @@ const resendOtp = function (req, res) {
         const info = await transport.sendMail({
             from: 'fathimathameeraap@gmail.com',
             to: email,
-       
+
             subject: 'OTP Verification',
             text: `Your resend OTP for signup: ${req.session.otp}`
 
@@ -238,7 +242,7 @@ const getForgotOtp = async (req, res) => {
     const data = await User.findOne({ email: req.body.email })
     if (data) {
         req.session.otp = generateOTP(6)
-        console.log(req.session.otp )
+        console.log(req.session.otp)
         async function main() {
             const transport = nodemailer.createTransport({
                 service: 'gmail',
@@ -250,7 +254,7 @@ const getForgotOtp = async (req, res) => {
             const info = await transport.sendMail({
                 from: 'fathimathameeraap@gmail.com',
                 to: 'fathimathameeraap@gmail.com',
-             
+
                 subject: 'OTP Verification',
                 text: `Your  OTP for forgot password: ${req.session.otp}`
 

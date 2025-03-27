@@ -1149,7 +1149,7 @@
             })
             .catch(error => {
                 // Handle any error that occurred during the fetch operation
-                console.error('Error adding to cart:', error);
+                console.error('Error adding to cart, or product is blocked', error);
                 Swal.fire({
                     title: 'Error',
                     text: 'Failed to add item to cart. Please try again later.',

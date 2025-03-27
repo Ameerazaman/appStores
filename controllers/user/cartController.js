@@ -9,12 +9,11 @@ const Coupon = require('../../models/admin/couponmodel')
 const addToCart = async (req, res) => {
 
     try {
-        console.log("add to catt", req.params.id)
         const productId = req.params.id;
         console.log(productId)
         req.session.productId = productId
         const userId = req.session.user._id;
-        const productStock = await products.findOne({ _id: productId })
+        const productStock = await products.findOne({ _id: productId,isUnlist:false })
         console.log(productStock.quantity, "quantity")
         if (productStock.quantity > 0) {
             console.log("hai")
@@ -68,7 +67,7 @@ const addToCart = async (req, res) => {
             }
         }
         else {
-            console.log("product Out of stock")
+            console.log("product Out of stock or unlisted")
         }
 
     } catch (error) {

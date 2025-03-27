@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const router = express.Router()
 const users = require('../../models/user/usermodel')
 const products = require('../../models/admin/productModel')
-const { getAddProduct, deleteProduct, getEditProduct, doAddProduct, postEditProduct, getEditImage, postEditImage, MultImage, getProduct, DeleteMultiImg, productDetailPage, listProduct, unListProduct } = require('../../controllers/admin/productController')
+const { getAddProduct, deleteProduct, getEditProduct, doAddProduct, postEditProduct, getEditImage, postEditImage, MultImage, getProduct, DeleteMultiImg, productDetailPage, listProduct, unListProduct, searchProduct } = require('../../controllers/admin/productController')
 const { verifyAdmin, upload, ProductRules, productRes, editProductRes, categoryRules, categoryRes, editCategoryRes, EditCategoryRes, EditProductRes, verifyUser, cropImage } = require('../../middlewares/middleware')
 const{doLogin, postLogin, adminLogout}=require('../../controllers/admin/adminControllers')
 const fileUpload = require('express-fileupload')
@@ -40,7 +40,7 @@ router.post("/block/:id",verifyAdmin,blockCustomer)
 router.post('/unblock/:id',verifyAdmin,unblockCustomers)
   
 ///////// search a specific name///////
-router.post('/search',verifyAdmin,searchCustomer) 
+router.post('/customer/search',verifyAdmin,searchCustomer) 
 
 
 //*************************************dashbord */**************** */
@@ -84,6 +84,8 @@ router.post('/unList/:id',verifyAdmin,unListProduct)
 // get product detail apge
 router.get("/product-detail/:id",verifyAdmin,productDetailPage)
 
+// serach product
+router.post('/product/search',verifyAdmin,searchProduct) 
 ///**********************************Catogary *********************************/
 
 

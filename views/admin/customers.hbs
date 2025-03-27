@@ -7,9 +7,21 @@
     <meta name="viewport" content="width=device-width,  
                    initial-scale=1.0">
     <title>GeeksForGeeks</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="/dashboard.css">
     <style>
+        .searchbar2 {
+            display: flex;
+            align-items: center;
+            width: 300px;
+            background: #fff;
+            border-radius: 25px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
         .pagination {
             margin-top: 10px;
         }
@@ -32,6 +44,33 @@
 
         button:hover {
             background-color: blue;
+        }
+
+        .searchbar2 {
+            display: flex;
+            align-items: center;
+            width: 300px;
+            background: #fff;
+            border-radius: 25px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .searchbar2 input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        .searchbar2 svg {
+            width: 35px;
+            height: 35px;
+            fill: #333;
+            /* Set icon color */
+            cursor: pointer;
         }
     </style>
 </head>
@@ -110,53 +149,16 @@
         <div class="main">
 
             <div class="searchbar2">
-                <input type="text" name="" id="" placeholder="Search">
-                <div class="searchbtn">
-                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
-                        class="icn srchicn" alt="search-button">
-                </div>
+                <input type="text" id="searchInput" placeholder="Search">
+                <button id="searchButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 119 4.5a4.5 4.5 0 01.5 9z" />
+                    </svg>
+                </button>
             </div>
 
-            {{!-- <div class="box-container">
 
-                <div class="box box1">
-                    <div class="text">
-                        <h2 class="topic-heading">60.5k</h2>
-                        <h2 class="topic">Article Views</h2>
-                    </div>
-
-                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
-                        alt="Views">
-                </div>
-
-                <div class="box box2">
-                    <div class="text">
-                        <h2 class="topic-heading">150</h2>
-                        <h2 class="topic">Likes</h2>
-                    </div>
-
-                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png" alt="likes">
-                </div>
-
-                <div class="box box3">
-                    <div class="text">
-                        <h2 class="topic-heading">320</h2>
-                        <h2 class="topic">Comments</h2>
-                    </div>
-
-                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
-                        alt="comments">
-                </div>
-
-                <div class="box box4">
-                    <div class="text">
-                        <h2 class="topic-heading">70</h2>
-                        <h2 class="topic">Published</h2>
-                    </div>
-
-                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
-                </div>
-            </div> --}}
 
             <div class="report-container">
                 <div class="report-header">
@@ -347,18 +349,55 @@
                 });
         }
     </script>
-   <script>
-    // Loop through each data item and update the corresponding table row number
-    document.addEventListener('DOMContentLoaded', function() {
-        const dataRows = document.querySelectorAll('#customerBody tr');
-        dataRows.forEach((row, index) => {
-            const rowNumberCell = row.querySelector('th[scope="row"]');
-            if (rowNumberCell) {
-                rowNumberCell.textContent = index + 1;
-            }
+    <script>
+        // Loop through each data item and update the corresponding table row number
+        document.addEventListener('DOMContentLoaded', function () {
+            const dataRows = document.querySelectorAll('#customerBody tr');
+            dataRows.forEach((row, index) => {
+                const rowNumberCell = row.querySelector('th[scope="row"]');
+                if (rowNumberCell) {
+                    rowNumberCell.textContent = index + 1;
+                }
+            });
         });
-    });
-</script>
+
+        //Search customer
+        document.getElementById("searchButton").addEventListener("click", function () {
+            let query = document.getElementById("searchInput").value.toLowerCase();
+            console.log(query, "query")
+            fetch("/admin/customer/search", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username: query }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    let customerBody = document.getElementById("customerBody");
+                    customerBody.innerHTML = ""; // Clear the table
+                    console.log("data", data)
+                    data.forEach((customer, index) => {
+                        let row = `
+                        <tr>
+                            <th scope="row">${index + 1}</th>
+                            <td>${customer.username}</td>
+                            <td>${customer.email}</td>
+                            <td>${customer.password}</td>
+                            <td>
+                                ${customer.isBlocked
+                                ? `<button type="button" class="btn btn-danger" onclick="unblockUser('${customer._id}')">Unblock</button>`
+                                : `<button type="button" class="btn btn-success" onclick="blockUser('${customer._id}')">Block</button>`
+                            }
+                            </td>
+                        </tr>
+                    `;
+                        customerBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error("Error fetching customer data:", error));
+        });
+    </script>
 
 </body>
 
